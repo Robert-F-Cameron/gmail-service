@@ -2,6 +2,7 @@ import React from 'react'
 import ViewingPane from './ViewingPane'
 import EmailDetails from './EmailDetails'
 import SendEmailForm from './SendEmailForm'
+import SearchBar from './SearchBar'
 
 class App extends React.Component {
   constructor(props){
@@ -13,8 +14,11 @@ class App extends React.Component {
       newEmail : {sender: 'jane@galvanize.com',
                   recipient: '',
                   subject: '',
-                  message: ''}
+                  message: '',},
+      emailResponse: [],
+      searchInput: ''
     }
+    
   }
   async componentDidMount(){
     const response = await fetch('http://localhost:3001/emails')
@@ -49,15 +53,24 @@ class App extends React.Component {
       body: JSON.stringify(this.state.newEmail)
     })
     return response.json();
+    
   }
-  
+  handleSearchInput(e){
+    this.setState({searchInput: e.target.value})
+  }
+  handleSearch(e){
+    e.preventDefault()
+    //queryAPI?
+  }
+  //'?q=' to start query
   render(){
     return (
       <div>
         <h1>Email App!</h1>
+        <SendEmailForm handleSendEmail={this.handleSendEmail.bind(this)} handleRecipientInput={this.handleRecipientInput.bind(this)} handleSubjectInput={this.handleSubjectInput.bind(this)} handleMessageInput={this.handleMessageInput.bind(this)}/>
+        <SearchBar handleSearch={this.handleSearch.bind(this)} handleSearchInput={this.handleSearchInput.bind(this)}/>
         <ViewingPane emails = {this.state.emails} handleDetails={this.handleDetails.bind(this)}/>
         <EmailDetails emailDetails = {this.state.emailDetails}/>
-        <SendEmailForm handleSendEmail={this.handleSendEmail.bind(this)} handleRecipientInput={this.handleRecipientInput.bind(this)} handleSubjectInput={this.handleSubjectInput.bind(this)} handleMessageInput={this.handleMessageInput.bind(this)}/>
       </div>
     );
   }
