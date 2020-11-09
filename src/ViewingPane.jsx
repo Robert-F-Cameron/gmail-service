@@ -2,7 +2,10 @@ import React from 'react'
 
 function ViewingPane(props){
 
-    let emailList = props.emails.map(each => <li>{each.sender} - {each.subject}</li>);
+    let emailList = props.emails.map(each => 
+    <li>
+    {each.sender} - {each.subject} <button onClick={props.handleDetails} value ={each.id}>Details</button>
+    </li>);
 
     return(
         <div>
